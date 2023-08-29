@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +30,7 @@ public class Answer {
     //private Question question;
     // `public class Answer` @ManyToOne `private Question question`
     //질문 하나에 질문 여러개 퀘스쳔매니
+
     @ManyToOne
     private Question question;
 
