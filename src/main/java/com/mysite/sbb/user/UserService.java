@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public SiteUser create(String username, String email, String password) {
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password)); //시큐어리티코딩에서 @빈때문에 객제주입받아 수정가능
+        user.setPassword(passwordEncoder.encode(password));
         this.userRepository.save(user);
         return user;
     }
