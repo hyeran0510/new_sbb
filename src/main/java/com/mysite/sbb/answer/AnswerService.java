@@ -39,6 +39,12 @@ public class AnswerService {
         answer.setModifyDaye(LocalDateTime.now());
         this.answerRepository.save(answer);
     }
+
+    public void delete(Answer answer) {
+        this.answerRepository.delete(answer);
+    }
+
+
 }
 
 
