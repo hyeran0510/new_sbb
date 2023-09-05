@@ -18,7 +18,4 @@ public class QuestionForm {
     @NotEmpty(message = "내용을 입력하세요.")
     private String content;
 
-
-
-
 }
