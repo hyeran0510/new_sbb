@@ -39,7 +39,7 @@ public class Answer {
     private SiteUser author;
     //답변에 인증자 하나
 
-    private LocalDateTime modifyDaye;
+    private LocalDateTime modifyDate;
 
     }
 

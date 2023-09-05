@@ -2,7 +2,6 @@ package com.mysite.sbb.answer;
 
 
 import com.mysite.sbb.question.Question;
-import com.mysite.sbb.question.QuestionController;
 import com.mysite.sbb.question.QuestionService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
@@ -18,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 
+
 @RequestMapping("/answer")
 @RequiredArgsConstructor
 @Controller
@@ -25,35 +25,32 @@ public class AnswerController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
-
-    private UserService userService;
+    private final UserService userService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
     public String createAnswer(Model model, @PathVariable("id") Integer id,
-                               @Valid AnswerForm answerForm, BindingResult bindingResult
-    , Principal principal) {
+                               @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
         Question question = this.questionService.getQuestion(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
         if (bindingResult.hasErrors()) {
-            model.addAttribute("question",question);
+            model.addAttribute("question", question);
             return "question_detail";
         }
         this.answerService.create(question, answerForm.getContent(), siteUser);
         return String.format("redirect:/question/detail/%s", id);
     }
 
-    //principal  로그인한 사용자를 알 수 있음.
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String answerModify(AnswerForm answerForm, @PathVariable("id") Integer id, Principal principal) {
         Answer answer = this.answerService.getAnswer(id);
         if (!answer.getAuthor().getUsername().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다."); }
-                answerForm.setContent(answer.getContent());
-                return "answer_form";
-            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        answerForm.setContent(answer.getContent());
+        return "answer_form";
+    }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
@@ -63,13 +60,12 @@ public class AnswerController {
             return "answer_form";
         }
         Answer answer = this.answerService.getAnswer(id);
-        if (!answer.getAuthor().getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");}
-
-                this.answerService.mofigy(answer, answerForm.getContent());
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
-
+        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
+        this.answerService.modify(answer, answerForm.getContent());
+        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
@@ -82,10 +78,3 @@ public class AnswerController {
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
 }
-
-
-
-
-
-
-

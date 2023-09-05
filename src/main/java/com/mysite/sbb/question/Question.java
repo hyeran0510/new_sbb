@@ -39,5 +39,5 @@ public class Question {
     private SiteUser author;
     //siteUser 와 연결
 
-    private LocalDateTime modifyDaye;
+    private LocalDateTime modifyDate;
 }
